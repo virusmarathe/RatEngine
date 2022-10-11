@@ -188,7 +188,7 @@ namespace RatEditor.GameProject
                 var projectPath = Path.GetFullPath(Path.Combine(path, $"{ProjectName}{Project.Extension}"));
                 File.WriteAllText(projectPath, projectXML);
 
-                return projectPath;
+                return path;
             }
             catch (Exception ex)
             {

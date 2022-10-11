@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,13 @@ namespace RatEditor
             InitializeComponent();
 
             Loaded += OnMainWindowLoaded;
+            Closing += OnMainWindowClosing;
+        }
+
+        private void OnMainWindowClosing(object sender, CancelEventArgs e)
+        {
+            Closing -= OnMainWindowClosing;
+            GameProject.Project.Current?.Unload();
         }
 
         private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
@@ -36,13 +44,14 @@ namespace RatEditor
         private void OpenProjectBrowserDialog()
         {
             var projBrowser = new GameProject.ProjectBrowserDialog();
-            if (projBrowser.ShowDialog() == false)
+            if (projBrowser.ShowDialog() == false || projBrowser.DataContext == null)
             {
                 Application.Current.Shutdown();
             }
             else
             {
-
+                GameProject.Project.Current?.Unload();
+                DataContext = projBrowser.DataContext;
             }
         }
     }
