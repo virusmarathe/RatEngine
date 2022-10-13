@@ -44,7 +44,6 @@ namespace RatEditor.GameProject
             Debug.Assert(project != null);
             Project = project;
             Name = name;
-            IsActive = true;
         }
     }
 }

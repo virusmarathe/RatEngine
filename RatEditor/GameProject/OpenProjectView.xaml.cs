@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,6 +22,14 @@ namespace RatEditor.GameProject
         public OpenProjectView()
         {
             InitializeComponent();
+
+            Loaded += OpenProjectView_Loaded;
+        }
+
+        private void OpenProjectView_Loaded(object sender, RoutedEventArgs e)
+        {
+            var item = projectsListBox.ItemContainerGenerator.ContainerFromIndex(projectsListBox.SelectedIndex) as ListBoxItem;
+            item?.Focus();
         }
 
         private void OnOpenButton_Click(object sender, RoutedEventArgs e)
@@ -46,6 +55,14 @@ namespace RatEditor.GameProject
             }
             win.DialogResult = dialogResult;
             win.Close();
+        }
+
+        private void ListBoxItem_KeyPressed(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                OpenSelectedProject();
+            }
         }
     }
 }
