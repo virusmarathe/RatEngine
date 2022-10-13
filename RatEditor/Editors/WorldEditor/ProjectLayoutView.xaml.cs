@@ -23,10 +23,5 @@ namespace RatEditor.Editors
         {
             InitializeComponent();
         }
-        //private void OnAddSceneButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    var vm = DataContext as Project;
-        //    vm.AddScene("New Scene " + vm.Scenes.Count);
-        //}
     }
 }

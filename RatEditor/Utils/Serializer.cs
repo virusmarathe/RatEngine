@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Xml;
 
 namespace RatEditor.Utils
 {
@@ -13,9 +14,16 @@ namespace RatEditor.Utils
         {
             try
             {
-                using var fs = new FileStream(path, FileMode.Create);
+//                using var fs = new FileStream(path, FileMode.Create);
                 var serializer = new DataContractSerializer(typeof(T));
-                serializer.WriteObject(fs, instance);
+                var settings = new XmlWriterSettings()
+                {
+                    Indent = true
+                };
+                using (var writer = XmlWriter.Create(path, settings))
+                {
+                    serializer.WriteObject(writer, instance);
+                }
             }
             catch (Exception ex)
             {

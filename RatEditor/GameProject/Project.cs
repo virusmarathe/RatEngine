@@ -31,11 +31,12 @@ namespace RatEditor.GameProject
 
         public static Project Current => Application.Current.MainWindow.DataContext as Project;
 
-        public ICommand AddScene { get; private set; }
-        public ICommand RemoveScene { get; private set; }
+        public ICommand AddSceneCommand { get; private set; }
+        public ICommand RemoveSceneCommand { get; private set; }
 
-        public ICommand Undo { get; private set; }
-        public ICommand Redo { get; private set; }
+        public ICommand UndoCommand { get; private set; }
+        public ICommand RedoCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
 
         public static UndoRedo UndoRedo { get; } = new UndoRedo();
 
@@ -61,7 +62,7 @@ namespace RatEditor.GameProject
             }
             ActiveScene = Scenes.FirstOrDefault(x => x.IsActive);
 
-            AddScene = new RelayCommand<object>(x =>
+            AddSceneCommand = new RelayCommand<object>(x =>
             {
                 AddSceneInternal($"New Scene {_scenes.Count}");
                 Scene addedScene = _scenes.Last();
@@ -74,7 +75,7 @@ namespace RatEditor.GameProject
                 ));
             });
 
-            RemoveScene = new RelayCommand<Scene>(x =>
+            RemoveSceneCommand = new RelayCommand<Scene>(x =>
             {
                 int sceneIndex = _scenes.IndexOf(x);
                 RemoveSceneInternal(x);
@@ -86,8 +87,9 @@ namespace RatEditor.GameProject
                 ));
             }, x => !x.IsActive);
 
-            Undo = new RelayCommand<object>(x => UndoRedo.Undo());
-            Redo = new RelayCommand<object>(x => UndoRedo.Redo());
+            UndoCommand = new RelayCommand<object>(x => UndoRedo.Undo());
+            RedoCommand = new RelayCommand<object>(x => UndoRedo.Redo());
+            SaveCommand = new RelayCommand<object>(x => Save(this));
         }
 
         public void Unload() { }
