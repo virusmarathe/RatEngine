@@ -1,4 +1,5 @@
-﻿using RatEditor.GameProject;
+﻿using RatEditor.Components;
+using RatEditor.GameProject;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,6 +23,14 @@ namespace RatEditor.Editors
         public ProjectLayoutView()
         {
             InitializeComponent();
+        }
+
+        private void OnAddGameEntity_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var vm = button.DataContext as Scene;
+
+            vm.AddGameEntityCommand.Execute(new GameEntity(vm) { Name = "Empty Game Entity" });
         }
     }
 }
