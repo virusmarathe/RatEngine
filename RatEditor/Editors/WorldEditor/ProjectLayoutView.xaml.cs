@@ -20,6 +20,8 @@ namespace RatEditor.Editors
     /// </summary>
     public partial class ProjectLayoutView : UserControl
     {
+        private int _entityID = 0;
+
         public ProjectLayoutView()
         {
             InitializeComponent();
@@ -30,7 +32,20 @@ namespace RatEditor.Editors
             var button = sender as Button;
             var vm = button.DataContext as Scene;
 
-            vm.AddGameEntityCommand.Execute(new GameEntity(vm) { Name = "Empty Game Entity" });
+            vm.AddGameEntityCommand.Execute(new GameEntity(vm) { Name = $"Empty Game Entity {_entityID}" });
+            _entityID++;
+        }
+
+        private void OnGameEntity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as ListBox).SelectedItems.Count == 0)
+            {
+                GameEntityView.Instance.DataContext = null;
+                return;
+            }
+
+            var entity = (sender as ListBox).SelectedItems[0];
+            GameEntityView.Instance.DataContext = entity;
         }
     }
 }

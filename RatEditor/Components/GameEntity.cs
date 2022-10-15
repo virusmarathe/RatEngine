@@ -9,6 +9,7 @@ using System.Text;
 namespace RatEditor.Components
 {
     [DataContract]
+    [KnownType(typeof(Transform))]
     public class GameEntity : ViewModelBase
     {
         private string _name;
@@ -35,12 +36,18 @@ namespace RatEditor.Components
         {
             Debug.Assert(parent != null);
             ParentScene = parent;
+            _components.Add(new Transform(this));
+            OnDeserialized(new StreamingContext());
         }
 
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-
+            if (_components != null)
+            {
+                Components = new ReadOnlyObservableCollection<Component>(_components);
+                OnPropertyChanged(nameof(Components));
+            }
         }
     }
 }
