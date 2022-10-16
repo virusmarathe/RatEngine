@@ -40,13 +40,7 @@ namespace RatEditor.Editors
 
         private void OnGameEntity_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            GameEntityView.Instance.DataContext = null;
             var listBox = sender as ListBox;
-            if (e.AddedItems.Count > 0)
-            {
-                GameEntityView.Instance.DataContext = listBox.SelectedItems[0]; // temp single view
-            }
-
             var newSelection = listBox.SelectedItems.Cast<GameEntity>().ToList();
             var prevSelection = newSelection.Except(e.AddedItems.Cast<GameEntity>()).Concat(e.RemovedItems.Cast<GameEntity>()).ToList();
 
@@ -61,6 +55,14 @@ namespace RatEditor.Editors
                     listBox.UnselectAll();
                     newSelection.ForEach(x => (listBox.ItemContainerGenerator.ContainerFromItem(x) as ListBoxItem).IsSelected = true);
                 }));
+
+            MSGameEntity mSGameEntity = null;
+
+            if (newSelection.Any())
+            {
+                mSGameEntity = new MSGameEntity(newSelection);
+            }
+            GameEntityView.Instance.DataContext = mSGameEntity;
         }
     }
 }

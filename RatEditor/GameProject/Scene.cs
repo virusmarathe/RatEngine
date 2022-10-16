@@ -11,7 +11,7 @@ using System.Windows.Input;
 namespace RatEditor.GameProject
 {
     [DataContract]
-    public class Scene : ViewModelBase
+    class Scene : ViewModelBase
     {
         private string _name;
         [DataMember]
