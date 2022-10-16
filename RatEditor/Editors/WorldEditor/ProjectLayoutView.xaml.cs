@@ -1,7 +1,9 @@
 ﻿using RatEditor.Components;
 using RatEditor.GameProject;
+using RatEditor.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -38,14 +40,27 @@ namespace RatEditor.Editors
 
         private void OnGameEntity_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((sender as ListBox).SelectedItems.Count == 0)
+            GameEntityView.Instance.DataContext = null;
+            var listBox = sender as ListBox;
+            if (e.AddedItems.Count > 0)
             {
-                GameEntityView.Instance.DataContext = null;
-                return;
+                GameEntityView.Instance.DataContext = listBox.SelectedItems[0]; // temp single view
             }
 
-            var entity = (sender as ListBox).SelectedItems[0];
-            GameEntityView.Instance.DataContext = entity;
+            var newSelection = listBox.SelectedItems.Cast<GameEntity>().ToList();
+            var prevSelection = newSelection.Except(e.AddedItems.Cast<GameEntity>()).Concat(e.RemovedItems.Cast<GameEntity>()).ToList();
+
+            Project.UndoRedo.Add(new UndoRedoAction("Change selection",
+                () => // undo 
+                {
+                    listBox.UnselectAll();
+                    prevSelection.ForEach(x => (listBox.ItemContainerGenerator.ContainerFromItem(x) as ListBoxItem).IsSelected = true);
+                },
+                () => // redo
+                {
+                    listBox.UnselectAll();
+                    newSelection.ForEach(x => (listBox.ItemContainerGenerator.ContainerFromItem(x) as ListBoxItem).IsSelected = true);
+                }));
         }
     }
 }

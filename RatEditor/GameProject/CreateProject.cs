@@ -108,8 +108,9 @@ namespace RatEditor.GameProject
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
-                // TODO: log error
+                Debug.WriteLine(ex);
+                Logger.Log(MessageType.Error, $"Failed to load in project templates");
+                throw;
             }
         }
 
@@ -136,7 +137,8 @@ namespace RatEditor.GameProject
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                // TODO: log error
+                Logger.Log(MessageType.Error, $"Failed to create project templates");
+                throw;
             }
         }
 
@@ -193,8 +195,8 @@ namespace RatEditor.GameProject
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                // TODO: log error
-                return string.Empty;
+                Logger.Log(MessageType.Error, $"Failed to create project templates");
+                throw;
             }
         }
     }

@@ -92,7 +92,10 @@ namespace RatEditor.GameProject
             SaveCommand = new RelayCommand<object>(x => Save(this));
         }
 
-        public void Unload() { }
+        public void Unload() 
+        {
+            UndoRedo.Reset();
+        }
 
         public static Project Load(string file)
         {
@@ -103,6 +106,7 @@ namespace RatEditor.GameProject
         public static void Save(Project project)
         {
             Serializer.ToFile(project, project.FullPath);
+            Logger.Log(MessageType.Info, $"Project saved to {project.FullPath}");
         }
 
         private void AddSceneInternal(string sceneName)

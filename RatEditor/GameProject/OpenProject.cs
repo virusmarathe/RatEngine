@@ -7,6 +7,7 @@ using System.IO;
 using System.Collections.ObjectModel;
 using System.Linq;
 using RatEditor.Utils;
+using System.Windows.Shapes;
 
 namespace RatEditor.GameProject
 {
@@ -52,6 +53,8 @@ namespace RatEditor.GameProject
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                Logger.Log(MessageType.Error, $"Failed to read project data");
+                throw;
             }
         }
 
